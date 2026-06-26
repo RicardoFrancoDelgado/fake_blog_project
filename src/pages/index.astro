@@ -1,0 +1,451 @@
+---
+import Base from '../layouts/Base.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import PostCard from '../components/PostCard.astro';
+
+type Post = {
+  slug: string;
+  title: string;
+  excerpt: string;
+  date: string;
+  readTime: string;
+  tags: string[];
+  featured: boolean;
+  accentColor: 'blue' | 'violet' | 'green';
+};
+
+const posts: Post[] = [
+  {
+    slug: 'react-server-components-explicado',
+    title: 'React Server Components de uma vez por todas',
+    excerpt: 'Depois de meses confuso com RSC, finalmente montei um modelo mental que faz sentido. Aqui vai tudo que aprendi, sem enrolação.',
+    date: '2025-06-20',
+    readTime: '8 min de leitura',
+    tags: ['React', 'Next.js', 'Frontend'],
+    featured: true,
+    accentColor: 'blue',
+  },
+  {
+    slug: 'typescript-patterns-2025',
+    title: 'Patterns de TypeScript que mudaram meu código',
+    excerpt: 'Template Literal Types, Discriminated Unions e Infer: três padrões avançados que usei essa semana e não quero mais viver sem.',
+    date: '2025-06-12',
+    readTime: '6 min de leitura',
+    tags: ['TypeScript', 'DX'],
+    featured: false,
+    accentColor: 'violet',
+  },
+  {
+    slug: 'sqlite-em-producao',
+    title: 'Coloquei SQLite em produção e não me arrependo',
+    excerpt: 'Todo mundo fala que banco relacional em arquivo não escala. Coloquei pra testar. O resultado foi surpreendente.',
+    date: '2025-06-05',
+    readTime: '5 min de leitura',
+    tags: ['Backend', 'SQLite', 'Infra'],
+    featured: false,
+    accentColor: 'green',
+  },
+  {
+    slug: 'design-tokens-na-pratica',
+    title: 'Design tokens na prática com CSS nativo',
+    excerpt: 'Sem Sass, sem bibliotecas. CSS custom properties modernos são suficientes para um sistema de design sólido.',
+    date: '2025-05-28',
+    readTime: '4 min de leitura',
+    tags: ['CSS', 'Design Systems'],
+    featured: false,
+    accentColor: 'blue',
+  },
+  {
+    slug: 'git-workflow-para-times-pequenos',
+    title: 'Git workflow para times pequenos (que realmente funciona)',
+    excerpt: 'Gitflow é burocrático demais. Trunk-based parece arriscado. O que uso no dia a dia fica no meio-termo.',
+    date: '2025-05-19',
+    readTime: '5 min de leitura',
+    tags: ['Git', 'DevOps', 'Workflow'],
+    featured: false,
+    accentColor: 'violet',
+  },
+];
+---
+
+<Base>
+  <Header />
+
+  <main class="main">
+    <section class="hero">
+      <div class="hero-eyebrow">
+        <span class="dot" aria-hidden="true"></span>
+        Novo por aqui?
+      </div>
+      <h1 class="hero-title">
+        Um espaço pra pensar<br />
+        <em>em voz alta</em> sobre tech.
+      </h1>
+      <p class="hero-sub">
+        Código, ferramentas, decisões de arquitetura e os erros que me ensinaram mais
+        do que qualquer documentação.
+      </p>
+      <div class="hero-stats">
+        <div class="stat">
+          <span class="stat-num">47</span>
+          <span class="stat-label">posts publicados</span>
+        </div>
+        <div class="stat-div" aria-hidden="true"></div>
+        <div class="stat">
+          <span class="stat-num">3.2k</span>
+          <span class="stat-label">leitores</span>
+        </div>
+        <div class="stat-div" aria-hidden="true"></div>
+        <div class="stat">
+          <span class="stat-num">2019</span>
+          <span class="stat-label">desde</span>
+        </div>
+      </div>
+    </section>
+
+    <section class="filter-bar">
+      <div class="filter-inner">
+        <span class="filter-label">Filtrar:</span>
+        <div class="filter-pills">
+          <button class="pill active">Todos</button>
+          <button class="pill">Frontend</button>
+          <button class="pill">Backend</button>
+          <button class="pill">DevOps</button>
+          <button class="pill">CSS</button>
+          <button class="pill">TypeScript</button>
+        </div>
+      </div>
+    </section>
+
+    <section class="posts-section">
+      <div class="posts-header">
+        <h2 class="posts-heading">Posts recentes</h2>
+        <span class="posts-count">{posts.length} publicações</span>
+      </div>
+
+      <div class="posts-grid">
+        {posts.map((post) => (
+          <PostCard {...post} />
+        ))}
+      </div>
+
+      <div class="load-more-wrap">
+        <button class="load-more">
+          Carregar mais
+          <span class="load-icon" aria-hidden="true">↓</span>
+        </button>
+      </div>
+    </section>
+
+    <section class="newsletter">
+      <div class="newsletter-inner">
+        <div class="newsletter-text">
+          <h3 class="newsletter-title">Novos posts direto na sua caixa</h3>
+          <p class="newsletter-desc">Sem spam. Só o que realmente vale ler — uma ou duas vezes por mês.</p>
+        </div>
+        <form class="newsletter-form" onsubmit="return false">
+          <input
+            type="email"
+            class="newsletter-input"
+            placeholder="seu@email.com"
+            aria-label="Seu e-mail"
+          />
+          <button type="submit" class="newsletter-btn">Assinar</button>
+        </form>
+      </div>
+      <div class="newsletter-glow" aria-hidden="true"></div>
+    </section>
+  </main>
+
+  <Footer />
+</Base>
+
+<style>
+  .main { flex: 1; }
+
+  .hero {
+    max-width: 860px;
+    margin: 0 auto;
+    padding: 72px 24px 56px;
+  }
+
+  .hero-eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-family: var(--font-mono);
+    font-size: 0.78rem;
+    color: var(--accent-green);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    margin-bottom: 20px;
+  }
+
+  .dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--accent-green);
+    display: inline-block;
+    box-shadow: 0 0 6px var(--accent-green);
+  }
+
+  .hero-title {
+    font-size: clamp(2.2rem, 5vw, 3.4rem);
+    color: var(--text);
+    margin-bottom: 16px;
+    max-width: 580px;
+  }
+
+  .hero-title em {
+    font-style: italic;
+    color: var(--accent-blue);
+  }
+
+  .hero-sub {
+    font-size: 1.05rem;
+    color: var(--text-muted);
+    max-width: 500px;
+    line-height: 1.7;
+    margin-bottom: 40px;
+  }
+
+  .hero-stats {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+  }
+
+  .stat {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+
+  .stat-num {
+    font-family: var(--font-mono);
+    font-size: 1.4rem;
+    font-weight: 500;
+    color: var(--text);
+    letter-spacing: -0.04em;
+  }
+
+  .stat-label {
+    font-size: 0.72rem;
+    color: var(--text-faint);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+  }
+
+  .stat-div {
+    width: 1px;
+    height: 32px;
+    background: var(--border);
+  }
+
+  .filter-bar {
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+    background: var(--surface);
+  }
+
+  .filter-inner {
+    max-width: 860px;
+    margin: 0 auto;
+    padding: 12px 24px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+  .filter-inner::-webkit-scrollbar { display: none; }
+
+  .filter-label {
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    color: var(--text-faint);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    flex-shrink: 0;
+  }
+
+  .filter-pills {
+    display: flex;
+    gap: 6px;
+    flex-wrap: nowrap;
+  }
+
+  .pill {
+    font-family: var(--font-body);
+    font-size: 0.8rem;
+    font-weight: 500;
+    color: var(--text-muted);
+    background: transparent;
+    border: 1px solid var(--border);
+    border-radius: 99px;
+    padding: 5px 14px;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: color 0.15s, border-color 0.15s, background 0.15s;
+  }
+  .pill:hover {
+    color: var(--text);
+    border-color: var(--text-faint);
+  }
+  .pill.active {
+    color: var(--bg);
+    background: var(--accent-blue);
+    border-color: var(--accent-blue);
+  }
+
+  .posts-section {
+    max-width: 860px;
+    margin: 0 auto;
+    padding: 48px 24px;
+  }
+
+  .posts-header {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    margin-bottom: 28px;
+  }
+
+  .posts-heading {
+    font-family: var(--font-body);
+    font-size: 0.85rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--text-muted);
+  }
+
+  .posts-count {
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    color: var(--text-faint);
+  }
+
+  .posts-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px;
+  }
+
+  .load-more-wrap {
+    display: flex;
+    justify-content: center;
+    margin-top: 40px;
+  }
+
+  .load-more {
+    font-family: var(--font-body);
+    font-size: 0.88rem;
+    font-weight: 500;
+    color: var(--text-muted);
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 99px;
+    padding: 10px 28px;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    transition: color 0.15s, border-color 0.15s;
+  }
+  .load-more:hover { color: var(--text); border-color: var(--text-faint); }
+
+  .load-icon { transition: transform 0.2s; }
+  .load-more:hover .load-icon { transform: translateY(2px); }
+
+  .newsletter {
+    position: relative;
+    overflow: hidden;
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+    background: var(--surface);
+  }
+
+  .newsletter-inner {
+    max-width: 860px;
+    margin: 0 auto;
+    padding: 56px 24px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 40px;
+    flex-wrap: wrap;
+    position: relative;
+    z-index: 1;
+  }
+
+  .newsletter-title {
+    font-size: 1.5rem;
+    margin-bottom: 8px;
+  }
+
+  .newsletter-desc {
+    font-size: 0.88rem;
+    color: var(--text-muted);
+  }
+
+  .newsletter-form {
+    display: flex;
+    gap: 8px;
+    flex-shrink: 0;
+  }
+
+  .newsletter-input {
+    font-family: var(--font-body);
+    font-size: 0.9rem;
+    background: var(--surface-2);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    padding: 10px 16px;
+    color: var(--text);
+    outline: none;
+    width: 220px;
+    transition: border-color 0.2s, box-shadow 0.2s;
+  }
+  .newsletter-input::placeholder { color: var(--text-faint); }
+  .newsletter-input:focus {
+    border-color: var(--accent-blue);
+    box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent-blue) 15%, transparent);
+  }
+
+  .newsletter-btn {
+    font-family: var(--font-body);
+    font-size: 0.9rem;
+    font-weight: 600;
+    background: var(--accent-blue);
+    color: #fff;
+    border: none;
+    border-radius: var(--radius-sm);
+    padding: 10px 22px;
+    cursor: pointer;
+    transition: opacity 0.15s, transform 0.15s;
+  }
+  .newsletter-btn:hover { opacity: 0.88; transform: translateY(-1px); }
+
+  .newsletter-glow {
+    position: absolute;
+    right: -80px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 400px;
+    height: 400px;
+    border-radius: 50%;
+    background: radial-gradient(circle, color-mix(in srgb, var(--accent-violet) 12%, transparent), transparent 70%);
+    pointer-events: none;
+  }
+
+  @media (max-width: 700px) {
+    .hero { padding: 48px 20px 40px; }
+    .posts-section { padding: 36px 16px; }
+    .posts-grid { grid-template-columns: 1fr; }
+    .newsletter-form { width: 100%; }
+    .newsletter-input { flex: 1; width: auto; min-width: 0; }
+  }
+</style>

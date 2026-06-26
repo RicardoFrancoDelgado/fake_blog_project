@@ -1,0 +1,372 @@
+---
+import Base from './Base.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+
+interface Props {
+  title: string;
+  excerpt: string;
+  date: string;
+  readTime: string;
+  tags: string[];
+  accentColor?: 'blue' | 'violet' | 'green';
+}
+
+const { title, excerpt, date, readTime, tags, accentColor = 'blue' } = Astro.props;
+
+const accentMap = {
+  blue:   'var(--accent-blue)',
+  violet: 'var(--accent-violet)',
+  green:  'var(--accent-green)',
+};
+const accent = accentMap[accentColor];
+
+const formattedDate = new Date(date).toLocaleDateString('pt-BR', {
+  day: '2-digit', month: 'long', year: 'numeric'
+});
+---
+
+<Base title={`${title} — void.log`} description={excerpt}>
+  <Header />
+
+  <main class="post-main">
+    <!-- Back link -->
+    <div class="back-wrap">
+      <a href="/" class="back-link">
+        <span aria-hidden="true">←</span> Todos os posts
+      </a>
+    </div>
+
+    <!-- Article header -->
+    <header class="post-header" style={`--post-accent: ${accent}`}>
+      <div class="post-tags">
+        {tags.map((tag, i) => (
+          <span class:list={['tag', `tag-${(i % 3) + 1}`]}>{tag}</span>
+        ))}
+      </div>
+
+      <h1 class="post-title">{title}</h1>
+      <p class="post-excerpt">{excerpt}</p>
+
+      <div class="post-meta">
+        <div class="author">
+          <div class="author-avatar" aria-hidden="true">V</div>
+          <div class="author-info">
+            <span class="author-name">void.author</span>
+            <span class="author-role">Engenheiro de Software</span>
+          </div>
+        </div>
+        <div class="post-details">
+          <time datetime={date}>{formattedDate}</time>
+          <span class="sep" aria-hidden="true">·</span>
+          <span>{readTime}</span>
+        </div>
+      </div>
+
+      <div class="post-accent-line"></div>
+    </header>
+
+    <!-- Article body -->
+    <article class="post-body">
+      <slot />
+    </article>
+
+    <!-- Bottom nav -->
+    <nav class="post-nav">
+      <a href="/" class="post-nav-link prev">
+        <span class="nav-label">← Anterior</span>
+        <span class="nav-title">TypeScript Patterns que mudaram meu código</span>
+      </a>
+      <a href="/" class="post-nav-link next">
+        <span class="nav-label">Próximo →</span>
+        <span class="nav-title">Git workflow para times pequenos</span>
+      </a>
+    </nav>
+  </main>
+
+  <Footer />
+</Base>
+
+<style>
+  .post-main {
+    max-width: 700px;
+    margin: 0 auto;
+    padding: 0 24px 80px;
+    flex: 1;
+  }
+
+  /* ── Back link ─────────────────────────────────── */
+  .back-wrap {
+    padding: 28px 0 0;
+  }
+
+  .back-link {
+    font-family: var(--font-mono);
+    font-size: 0.78rem;
+    color: var(--text-faint);
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    transition: color 0.15s;
+  }
+  .back-link:hover { color: var(--text-muted); }
+
+  /* ── Post Header ───────────────────────────────── */
+  .post-header {
+    padding: 40px 0 36px;
+    border-bottom: 1px solid var(--border);
+    margin-bottom: 48px;
+  }
+
+  .post-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-bottom: 20px;
+  }
+
+  .tag {
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    font-weight: 500;
+    padding: 3px 9px;
+    border-radius: 99px;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+  }
+  .tag-1 { background: var(--tag-1); color: var(--tag-1-text); }
+  .tag-2 { background: var(--tag-2); color: var(--tag-2-text); }
+  .tag-3 { background: var(--tag-3); color: var(--tag-3-text); }
+
+  .post-title {
+    font-size: clamp(1.9rem, 4vw, 2.8rem);
+    color: var(--text);
+    margin-bottom: 16px;
+    line-height: 1.15;
+  }
+
+  .post-excerpt {
+    font-size: 1.05rem;
+    color: var(--text-muted);
+    line-height: 1.7;
+    margin-bottom: 32px;
+  }
+
+  .post-meta {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 16px;
+    margin-bottom: 28px;
+  }
+
+  .author {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .author-avatar {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--accent-blue), var(--accent-violet));
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: var(--font-mono);
+    font-size: 0.85rem;
+    font-weight: 500;
+    color: #fff;
+    flex-shrink: 0;
+  }
+
+  .author-info {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+
+  .author-name {
+    font-size: 0.88rem;
+    font-weight: 600;
+    color: var(--text);
+  }
+
+  .author-role {
+    font-size: 0.75rem;
+    color: var(--text-faint);
+  }
+
+  .post-details {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.82rem;
+    color: var(--text-faint);
+    font-family: var(--font-mono);
+  }
+
+  .sep { color: var(--text-faint); }
+
+  .post-accent-line {
+    height: 2px;
+    background: linear-gradient(90deg, var(--post-accent), transparent);
+    border-radius: 99px;
+  }
+
+  /* ── Article Body ──────────────────────────────── */
+  .post-body {
+    font-size: 1.05rem;
+    line-height: 1.8;
+    color: var(--text-muted);
+  }
+
+  .post-body :global(h2) {
+    font-size: 1.6rem;
+    color: var(--text);
+    margin: 2.2em 0 0.7em;
+  }
+
+  .post-body :global(h3) {
+    font-size: 1.25rem;
+    color: var(--text);
+    margin: 1.8em 0 0.6em;
+  }
+
+  .post-body :global(p) {
+    margin-bottom: 1.4em;
+  }
+
+  .post-body :global(a) {
+    color: var(--accent-blue);
+    text-decoration: underline;
+    text-underline-offset: 3px;
+    transition: opacity 0.15s;
+  }
+  .post-body :global(a:hover) { opacity: 0.75; }
+
+  .post-body :global(strong) {
+    color: var(--text);
+    font-weight: 600;
+  }
+
+  .post-body :global(em) {
+    color: var(--text);
+  }
+
+  .post-body :global(code) {
+    font-family: var(--font-mono);
+    font-size: 0.88em;
+    background: var(--surface-2);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 2px 6px;
+    color: var(--accent-violet);
+  }
+
+  .post-body :global(pre) {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    padding: 24px;
+    overflow-x: auto;
+    margin: 1.8em 0;
+    font-family: var(--font-mono);
+    font-size: 0.88rem;
+    line-height: 1.7;
+  }
+
+  .post-body :global(pre code) {
+    background: none;
+    border: none;
+    padding: 0;
+    color: var(--text-muted);
+    font-size: inherit;
+  }
+
+  .post-body :global(blockquote) {
+    border-left: 3px solid var(--accent-violet);
+    padding: 4px 0 4px 20px;
+    margin: 1.8em 0;
+    color: var(--text-muted);
+    font-style: italic;
+  }
+
+  .post-body :global(ul),
+  .post-body :global(ol) {
+    padding-left: 1.5em;
+    margin-bottom: 1.4em;
+    list-style: disc;
+  }
+
+  .post-body :global(ol) { list-style: decimal; }
+
+  .post-body :global(li) {
+    margin-bottom: 0.4em;
+  }
+
+  .post-body :global(hr) {
+    border: none;
+    border-top: 1px solid var(--border);
+    margin: 2.5em 0;
+  }
+
+  .post-body :global(.callout) {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-left: 3px solid var(--accent-blue);
+    border-radius: var(--radius-sm);
+    padding: 16px 20px;
+    margin: 1.8em 0;
+    font-size: 0.95rem;
+  }
+
+  /* ── Post Nav ──────────────────────────────────── */
+  .post-nav {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    margin-top: 64px;
+    padding-top: 40px;
+    border-top: 1px solid var(--border);
+  }
+
+  .post-nav-link {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    padding: 18px 20px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    transition: border-color 0.2s, transform 0.2s;
+  }
+  .post-nav-link:hover {
+    border-color: var(--accent-blue);
+    transform: translateY(-2px);
+  }
+  .post-nav-link.next { text-align: right; }
+
+  .nav-label {
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    color: var(--text-faint);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+  }
+
+  .nav-title {
+    font-size: 0.9rem;
+    color: var(--text-muted);
+    line-height: 1.4;
+  }
+  .post-nav-link:hover .nav-title { color: var(--text); }
+
+  @media (max-width: 600px) {
+    .post-nav { grid-template-columns: 1fr; }
+    .post-nav-link.next { text-align: left; }
+    .post-meta { flex-direction: column; align-items: flex-start; }
+  }
+</style>

@@ -1,0 +1,477 @@
+---
+import Base from "../layouts/Base.astro";
+import Header from "../components/Header.astro";
+import Footer from "../components/Footer.astro";
+
+const skills = [
+  { label: "TypeScript", level: 92 },
+  { label: "Java", level: 90 },
+  { label: "React / Next.js", level: 88 },
+  { label: "Node.js", level: 80 },
+  { label: "SQL & Databases", level: 80 },
+];
+
+const timeline = [
+  {
+    year: "2026",
+    event:
+      "Trabalhos freelance como programador ajudando equipes a entregar seus projetos e desenvolvendo os próprios projetos.",
+  },
+  { year: "2022", event: "Primeiro emprego Professor de Informática." },
+  { year: "2021", event: "Comecei a programar por curiosidade. Nunca parei." },
+];
+---
+
+<Base title="Sobre — void.log" description="Quem escreve esse blog e por quê.">
+  <Header />
+
+  <main class="about-main">
+    <!-- Hero -->
+    <section class="about-hero">
+      <div class="avatar-wrap">
+        <div class="avatar" aria-hidden="true">
+          <span class="avatar-letter">V</span>
+          <div class="avatar-ring"></div>
+        </div>
+      </div>
+
+      <div class="about-intro">
+        <p class="about-eyebrow">
+          <span class="dot"></span> Disponível para trabalho
+        </p>
+        <h1 class="about-name">void.author</h1>
+        <p class="about-role">Software Developer · Brasil</p>
+        <p class="about-bio">
+          Escrevo código há dez anos. Já trabalhei em fintech, logística, SaaS e
+          tive meu próprio estúdio por um tempo. Hoje sou Staff Engineer e
+          escrevo aqui sobre o que aprendo — e sobre os erros que me custaram
+          dias inteiros.
+        </p>
+
+        <div class="about-links">
+          <a
+            href="https://github.com/RicardoFrancoDelgado"
+            class="about-link"
+            target="_blank"
+            rel="noopener"
+          >
+            <span class="link-icon">⌥</span> GitHub
+          </a>
+          <a
+            href="https://www.linkedin.com/in/ricardofrancodelgado-dev/"
+            class="about-link"
+            target="_blank"
+            rel="noopener"
+          >
+            <span class="link-icon">✦</span> LinkedIn
+          </a>
+          <a href="mailto:ricardo.delgado693@gmail.com" class="about-link">
+            <span class="link-icon">@</span> E-mail
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <div class="divider"></div>
+
+    <!-- Skills -->
+    <section class="section">
+      <h2 class="section-title">
+        <span class="section-num">01</span> Onde passo meu tempo
+      </h2>
+
+      <div class="skills-grid">
+        {
+          skills.map((skill) => (
+            <div class="skill-item">
+              <div class="skill-header">
+                <span class="skill-label">{skill.label}</span>
+                <span class="skill-pct">{skill.level}%</span>
+              </div>
+              <div class="skill-bar">
+                <div class="skill-fill" style={`width: ${skill.level}%`} />
+              </div>
+            </div>
+          ))
+        }
+      </div>
+    </section>
+
+    <div class="divider"></div>
+
+    <!-- Timeline -->
+    <section class="section">
+      <h2 class="section-title">
+        <span class="section-num">02</span> Linha do tempo
+      </h2>
+
+      <ol class="timeline">
+        {
+          timeline.map((item, i) => (
+            <li class="timeline-item">
+              <div class="timeline-year">{item.year}</div>
+              <div class="timeline-connector" aria-hidden="true">
+                <div class="timeline-dot" />
+                {i < timeline.length - 1 && <div class="timeline-line" />}
+              </div>
+              <p class="timeline-event">{item.event}</p>
+            </li>
+          ))
+        }
+      </ol>
+    </section>
+
+    <div class="divider"></div>
+
+    <!-- Por que esse blog -->
+    <section class="section">
+      <h2 class="section-title">
+        <span class="section-num">03</span> Por que escrevo
+      </h2>
+      <div class="why-text">
+        <p>
+          Escrever me força a entender de verdade. É fácil achar que você sabe
+          algo até precisar explicar. Esse blog é meu caderno público — um lugar
+          onde transformo confusão em clareza.
+        </p>
+        <p>
+          Se uma coisa que escrevo aqui economizar uma hora da sua vida, valeu o
+          tempo que gastei. E se você discordar de algo, me manda mensagem.
+          Discussão boa é a melhor forma de aprender.
+        </p>
+        <p>
+          Não tem algoritmo aqui. Não tem métrica de engajamento. Só texto e
+          código.
+        </p>
+      </div>
+    </section>
+  </main>
+
+  <Footer />
+</Base>
+
+<style>
+  .about-main {
+    max-width: 760px;
+    margin: 0 auto;
+    padding: 60px 24px 80px;
+    flex: 1;
+  }
+
+  /* ── Hero ─────────────────────────────────────── */
+  .about-hero {
+    display: flex;
+    gap: 48px;
+    align-items: flex-start;
+    flex-wrap: wrap;
+  }
+
+  .avatar-wrap {
+    flex-shrink: 0;
+  }
+
+  .avatar {
+    position: relative;
+    width: 100px;
+    height: 100px;
+  }
+
+  .avatar-letter {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    background: linear-gradient(
+      135deg,
+      var(--accent-blue),
+      var(--accent-violet)
+    );
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: var(--font-mono);
+    font-size: 2.2rem;
+    font-weight: 500;
+    color: #fff;
+    position: relative;
+    z-index: 1;
+  }
+
+  .avatar-ring {
+    position: absolute;
+    inset: -4px;
+    border-radius: 50%;
+    border: 1px solid var(--border);
+    animation: spin 8s linear infinite;
+    background: conic-gradient(
+      from 0deg,
+      var(--accent-blue),
+      var(--accent-violet),
+      transparent 60%
+    );
+    -webkit-mask: radial-gradient(
+      farthest-side,
+      transparent calc(100% - 1px),
+      #000 100%
+    );
+    mask: radial-gradient(
+      farthest-side,
+      transparent calc(100% - 1px),
+      #000 100%
+    );
+  }
+
+  @keyframes spin {
+    to {
+      transform: rotate(360deg);
+    }
+  }
+
+  .about-intro {
+    flex: 1;
+    min-width: 260px;
+  }
+
+  .about-eyebrow {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    color: var(--accent-green);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    margin-bottom: 12px;
+  }
+
+  .dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--accent-green);
+    box-shadow: 0 0 6px var(--accent-green);
+    display: inline-block;
+  }
+
+  .about-name {
+    font-size: 2.4rem;
+    color: var(--text);
+    margin-bottom: 4px;
+  }
+
+  .about-role {
+    font-size: 0.9rem;
+    color: var(--text-faint);
+    font-family: var(--font-mono);
+    margin-bottom: 20px;
+  }
+
+  .about-bio {
+    font-size: 1rem;
+    color: var(--text-muted);
+    line-height: 1.75;
+    margin-bottom: 28px;
+  }
+
+  .about-links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+
+  .about-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 0.85rem;
+    font-weight: 500;
+    color: var(--text-muted);
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    padding: 7px 14px;
+    transition:
+      color 0.15s,
+      border-color 0.15s;
+  }
+  .about-link:hover {
+    color: var(--text);
+    border-color: var(--text-faint);
+  }
+
+  .link-icon {
+    font-size: 0.75rem;
+    opacity: 0.6;
+  }
+
+  /* ── Divider ──────────────────────────────────── */
+  .divider {
+    height: 1px;
+    background: var(--border);
+    margin: 56px 0;
+  }
+
+  /* ── Section ──────────────────────────────────── */
+  .section {
+  }
+
+  .section-title {
+    font-family: var(--font-body);
+    font-size: 0.82rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: var(--text-muted);
+    margin-bottom: 32px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .section-num {
+    font-family: var(--font-mono);
+    color: var(--accent-blue);
+    font-size: 0.75rem;
+    opacity: 0.7;
+  }
+
+  /* ── Skills ───────────────────────────────────── */
+  .skills-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  .skill-item {
+  }
+
+  .skill-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    margin-bottom: 8px;
+  }
+
+  .skill-label {
+    font-size: 0.9rem;
+    color: var(--text);
+    font-weight: 500;
+  }
+
+  .skill-pct {
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    color: var(--text-faint);
+  }
+
+  .skill-bar {
+    height: 4px;
+    background: var(--surface-2);
+    border-radius: 99px;
+    overflow: hidden;
+  }
+
+  .skill-fill {
+    height: 100%;
+    border-radius: 99px;
+    background: linear-gradient(
+      90deg,
+      var(--accent-blue),
+      var(--accent-violet)
+    );
+    animation: grow 1.2s ease-out forwards;
+    transform-origin: left;
+  }
+
+  @keyframes grow {
+    from {
+      transform: scaleX(0);
+    }
+    to {
+      transform: scaleX(1);
+    }
+  }
+
+  /* ── Timeline ─────────────────────────────────── */
+  .timeline {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    list-style: none;
+  }
+
+  .timeline-item {
+    display: grid;
+    grid-template-columns: 60px 24px 1fr;
+    gap: 0 16px;
+    align-items: start;
+  }
+
+  .timeline-year {
+    font-family: var(--font-mono);
+    font-size: 0.78rem;
+    font-weight: 500;
+    color: var(--accent-blue);
+    padding-top: 2px;
+    text-align: right;
+  }
+
+  .timeline-connector {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0;
+  }
+
+  .timeline-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--accent-blue);
+    border: 2px solid var(--bg);
+    outline: 1px solid var(--accent-blue);
+    flex-shrink: 0;
+    margin-top: 4px;
+  }
+
+  .timeline-line {
+    width: 1px;
+    flex: 1;
+    min-height: 32px;
+    background: var(--border);
+    margin: 6px 0;
+  }
+
+  .timeline-event {
+    font-size: 0.92rem;
+    color: var(--text-muted);
+    line-height: 1.6;
+    padding-bottom: 24px;
+  }
+
+  /* ── Why ──────────────────────────────────────── */
+  .why-text {
+    display: flex;
+    flex-direction: column;
+    gap: 1.2em;
+    font-size: 1rem;
+    color: var(--text-muted);
+    line-height: 1.8;
+    max-width: 580px;
+  }
+
+  /* ── Responsive ───────────────────────────────── */
+  @media (max-width: 600px) {
+    .about-hero {
+      gap: 28px;
+    }
+    .avatar,
+    .avatar-letter {
+      width: 72px;
+      height: 72px;
+      font-size: 1.6rem;
+    }
+    .about-name {
+      font-size: 1.9rem;
+    }
+  }
+</style>

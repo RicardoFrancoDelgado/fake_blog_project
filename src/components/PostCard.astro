@@ -1,0 +1,166 @@
+---
+interface Props {
+  title: string;
+  excerpt: string;
+  date: string;
+  readTime: string;
+  tags: string[];
+  slug: string;
+  featured?: boolean;
+  accentColor?: 'blue' | 'violet' | 'green';
+}
+
+const {
+  title,
+  excerpt,
+  date,
+  readTime,
+  tags,
+  slug,
+  featured = false,
+  accentColor = 'blue',
+} = Astro.props;
+
+const accentMap = {
+  blue:   'var(--accent-blue)',
+  violet: 'var(--accent-violet)',
+  green:  'var(--accent-green)',
+};
+
+const accent = accentMap[accentColor];
+---
+
+<article class:list={['card', { featured }]} style={`--card-accent: ${accent}`}>
+  <a href={`/posts/${slug}`} class="card-link" aria-label={title}></a>
+
+  <div class="card-accent-bar"></div>
+
+  <div class="card-body">
+    <div class="card-tags">
+      {tags.map((tag, i) => (
+        <span class:list={['tag', `tag-${(i % 3) + 1}`]}>{tag}</span>
+      ))}
+    </div>
+
+    <h2 class="card-title">{title}</h2>
+    <p class="card-excerpt">{excerpt}</p>
+
+    <footer class="card-footer">
+      <time class="card-date" datetime={date}>
+        {new Date(date).toLocaleDateString('pt-BR', {
+          day: '2-digit', month: 'short', year: 'numeric'
+        })}
+      </time>
+      <span class="card-sep" aria-hidden="true">·</span>
+      <span class="card-read">{readTime}</span>
+      <span class="card-arrow" aria-hidden="true">→</span>
+    </footer>
+  </div>
+</article>
+
+<style>
+  .card {
+    position: relative;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    overflow: hidden;
+    transition: border-color 0.25s, transform 0.25s, box-shadow 0.25s;
+  }
+
+  .card:hover {
+    border-color: var(--card-accent);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 32px rgba(0,0,0,0.4), 0 0 0 1px color-mix(in srgb, var(--card-accent) 20%, transparent);
+  }
+
+  .card-link {
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+  }
+
+  .card-accent-bar {
+    height: 3px;
+    background: linear-gradient(90deg, var(--card-accent), transparent);
+    transition: opacity 0.25s;
+    opacity: 0.6;
+  }
+  .card:hover .card-accent-bar { opacity: 1; }
+
+  .card-body {
+    padding: 24px 28px 22px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .card-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+
+  .tag {
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    font-weight: 500;
+    padding: 3px 9px;
+    border-radius: 99px;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+  }
+  .tag-1 { background: var(--tag-1); color: var(--tag-1-text); }
+  .tag-2 { background: var(--tag-2); color: var(--tag-2-text); }
+  .tag-3 { background: var(--tag-3); color: var(--tag-3-text); }
+
+  .card-title {
+    font-size: 1.35rem;
+    color: var(--text);
+    transition: color 0.2s;
+  }
+  .card:hover .card-title { color: var(--card-accent); }
+
+  .card-excerpt {
+    font-size: 0.9rem;
+    color: var(--text-muted);
+    line-height: 1.65;
+  }
+
+  .card-footer {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: 4px;
+    font-size: 0.8rem;
+    color: var(--text-faint);
+  }
+
+  .card-arrow {
+    margin-left: auto;
+    color: var(--card-accent);
+    opacity: 0;
+    transform: translateX(-6px);
+    transition: opacity 0.2s, transform 0.2s;
+  }
+  .card:hover .card-arrow {
+    opacity: 1;
+    transform: translateX(0);
+  }
+
+  /* Featured card */
+  .card.featured {
+    grid-column: span 2;
+  }
+  .card.featured .card-title {
+    font-size: 1.75rem;
+  }
+  .card.featured .card-excerpt {
+    font-size: 0.95rem;
+  }
+
+  @media (max-width: 700px) {
+    .card.featured { grid-column: span 1; }
+    .card.featured .card-title { font-size: 1.35rem; }
+  }
+</style>

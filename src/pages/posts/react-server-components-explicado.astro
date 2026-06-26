@@ -1,0 +1,156 @@
+---
+import PostLayout from '../../layouts/PostLayout.astro';
+
+const code1 = `// ✅ Server Component — tudo isso funciona
+async function Page() {
+  const data = await db.query('SELECT * FROM posts');
+  const secret = process.env.API_SECRET;
+  return <PostList posts={data} />;
+}
+
+// ❌ Server Component — isso vai quebrar
+function Page() {
+  const [count, setCount] = useState(0); // hooks: não.
+  document.title = 'Oi';                 // DOM: não.
+  window.scrollTo(0, 0);                 // window: não.
+}`;
+
+const code2 = `// app/posts/page.tsx — Server Component
+export default async function PostsPage() {
+  const posts = await getPosts(); // direto no banco
+
+  return (
+    <main>
+      <h1>Posts</h1>
+      {posts.map(post => (
+        <PostCard key={post.id} post={post} />
+        // ^ também Server Component, sem JS no cliente
+      ))}
+      <SearchBar />
+        // ^ 'use client' — só esse cara precisa de interatividade
+    </main>
+  );
+}`;
+
+const code3 = `// Funciona!
+// ClientWrapper.tsx — 'use client'
+export function ClientWrapper({ children }) {
+  const [open, setOpen] = useState(false);
+  return (
+    <div>
+      <button onClick={() => setOpen(!open)}>Toggle</button>
+      {open && children}
+    </div>
+  );
+}
+
+// page.tsx — Server Component
+import { ClientWrapper } from './ClientWrapper';
+import { HeavyServerContent } from './HeavyServerContent';
+
+export default function Page() {
+  return (
+    <ClientWrapper>
+      <HeavyServerContent /> {/* Server Component passado como children */}
+    </ClientWrapper>
+  );
+}`;
+---
+
+<PostLayout
+  title="React Server Components de uma vez por todas"
+  excerpt="Depois de meses confuso com RSC, finalmente montei um modelo mental que faz sentido. Aqui vai tudo que aprendi, sem enrolação."
+  date="2025-06-20"
+  readTime="8 min de leitura"
+  tags={['React', 'Next.js', 'Frontend']}
+  accentColor="blue"
+>
+
+<p>
+  Quando os <strong>React Server Components</strong> foram anunciados, achei que eram mais um
+  nome chique pra coisa que já existia. Errei feio. Depois de queimar o cérebro tentando
+  entender por que meu estado sumia do nada e por que algumas funções simplesmente
+  <em>não podiam</em> ser chamadas onde eu queria — fui atrás de entender de verdade.
+</p>
+
+<p>
+  O que aprendi nesses meses está aqui. Sem mistério, sem firula.
+</p>
+
+<h2>O modelo mental que funcionou pra mim</h2>
+
+<p>
+  Pensa assim: no Next.js com App Router, todo componente começa como <strong>Server Component</strong>.
+  Ele roda no servidor, tem acesso ao banco de dados, ao sistema de arquivos, às variáveis de
+  ambiente secretas — e nunca chega no bundle do cliente. É um componente que <em>existe</em>
+  no servidor e gera HTML.
+</p>
+
+<p>
+  Quando você adiciona <code>'use client'</code> no topo do arquivo, você está criando uma
+  fronteira. A partir dali, o componente — e todos que ele importar — vira Client Component.
+  Roda no browser, tem acesso ao DOM, ao estado, aos hooks.
+</p>
+
+<blockquote>
+  A regra de ouro: a fronteira <code>'use client'</code> só pode descer na árvore. Você não
+  consegue "voltar" para o servidor dentro de um Client Component — a não ser passando um
+  Server Component como <code>children</code>.
+</blockquote>
+
+<h2>O que pode e o que não pode</h2>
+
+<p>
+  Essa é a tabela que deveria estar em cartaz na parede de todo dev Next.js:
+</p>
+
+<pre><code set:text={code1}></code></pre>
+
+<h2>O padrão que uso no dia a dia</h2>
+
+<p>
+  Aprendi a <strong>empurrar</strong> o <code>'use client'</code> o mais pra baixo possível na
+  árvore. Quanto menor o Client Component, melhor. O resto fica no servidor, sem peso no bundle.
+</p>
+
+<pre><code set:text={code2}></code></pre>
+
+<div class="callout">
+  💡 <strong>Dica:</strong> Se você tá sentindo vontade de colocar <code>'use client'</code> em
+  tudo "só pra garantir" — esse é o sinal de que o modelo mental ainda não clicou. Volte
+  nessa seção e releia com calma.
+</div>
+
+<h2>O truque dos children</h2>
+
+<p>
+  Esse foi o que mais me abriu a cabeça. Um Server Component <em>pode</em> ser filho de um
+  Client Component — desde que seja passado como <code>children</code> (ou qualquer outra prop
+  do tipo <code>ReactNode</code>). Não é magia: o servidor monta o Server Component antes,
+  e o cliente só recebe o resultado já pronto.
+</p>
+
+<pre><code set:text={code3}></code></pre>
+
+<h2>Ainda confuso? Normal.</h2>
+
+<p>
+  Levou semanas pra esse modelo assentar. A documentação do Next.js melhorou bastante, mas
+  ainda tem buracos. O que ajudou mais foi <strong>errar bastante</strong> e ler as mensagens de
+  erro com atenção — elas são surpreendentemente descritivas quando você entende o que estão
+  tentando dizer.
+</p>
+
+<p>
+  Se quiser explorar mais, o playground oficial do React tem exemplos interativos que valem
+  cada minuto. E se surgir dúvida, é só deixar nos comentários.
+</p>
+
+<hr />
+
+<p>
+  No próximo post vou falar sobre <strong>Suspense e streaming</strong> — que é onde RSC realmente
+  brilha em UX. Fique ligado.
+</p>
+
+</PostLayout>

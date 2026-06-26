@@ -1,0 +1,321 @@
+---
+import Base from '../layouts/Base.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+
+const previousIssues = [
+  { num: '012', title: 'O estado do CSS em 2025', date: 'Jun 2025', href: '#' },
+  { num: '011', title: 'Por que aprendi Rust (e parei)', date: 'Mai 2025', href: '#' },
+  { num: '010', title: 'Monorepo sem dor: o que aprendi', date: 'Abr 2025', href: '#' },
+  { num: '009', title: 'Três livros que mudaram como codifico', date: 'Mar 2025', href: '#' },
+];
+---
+
+<Base title="Newsletter — void.log" description="Posts e pensamentos direto no seu e-mail.">
+  <Header />
+
+  <main class="nl-main">
+
+    <section class="nl-hero">
+      <div class="nl-badge">
+        <span class="badge-dot"></span>
+        Edição #013 a caminho
+      </div>
+
+      <h1 class="nl-title">
+        Leitura leve.<br />
+        <em>Uma vez por mês.</em>
+      </h1>
+
+      <p class="nl-desc">
+        Cada edição traz um post novo, uma ferramenta que usei na semana,
+        um link que vale o clique — e às vezes um desabafo honesto sobre
+        o que está sendo difícil.
+      </p>
+
+      <form class="nl-form" onsubmit="return false">
+        <div class="nl-input-wrap">
+          <input
+            type="email"
+            class="nl-input"
+            placeholder="seu@email.com"
+            aria-label="Seu e-mail"
+          />
+          <button type="submit" class="nl-btn">
+            Quero receber
+            <span class="btn-arrow" aria-hidden="true">→</span>
+          </button>
+        </div>
+        <p class="nl-disclaimer">Sem spam. Cancela quando quiser. Sem julgamentos.</p>
+      </form>
+
+      <div class="nl-stats">
+        <div class="nl-stat">
+          <span class="stat-num">3.2k</span>
+          <span class="stat-label">leitores</span>
+        </div>
+        <div class="nl-stat-div"></div>
+        <div class="nl-stat">
+          <span class="stat-num">12</span>
+          <span class="stat-label">edições enviadas</span>
+        </div>
+        <div class="nl-stat-div"></div>
+        <div class="nl-stat">
+          <span class="stat-num">61%</span>
+          <span class="stat-label">taxa de abertura</span>
+        </div>
+      </div>
+    </section>
+
+    <section class="nl-archives">
+      <h2 class="archives-title">
+        <span class="arch-label">Edições anteriores</span>
+      </h2>
+
+      <ol class="issues-list">
+        {previousIssues.map(issue => (
+          <li class="issue-item">
+            <a href={issue.href} class="issue-link">
+              <span class="issue-num">#{issue.num}</span>
+              <span class="issue-title">{issue.title}</span>
+              <span class="issue-date">{issue.date}</span>
+              <span class="issue-arrow" aria-hidden="true">→</span>
+            </a>
+          </li>
+        ))}
+      </ol>
+    </section>
+
+  </main>
+
+  <Footer />
+</Base>
+
+<style>
+  .nl-main {
+    max-width: 680px;
+    margin: 0 auto;
+    padding: 72px 24px 80px;
+    flex: 1;
+  }
+
+  /* ── Hero ─────────────────────────────────────── */
+  .nl-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    color: var(--accent-violet);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    margin-bottom: 24px;
+    background: color-mix(in srgb, var(--accent-violet) 10%, transparent);
+    border: 1px solid color-mix(in srgb, var(--accent-violet) 20%, transparent);
+    border-radius: 99px;
+    padding: 5px 14px;
+  }
+
+  .badge-dot {
+    width: 5px;
+    height: 5px;
+    border-radius: 50%;
+    background: var(--accent-violet);
+    box-shadow: 0 0 6px var(--accent-violet);
+    animation: pulse 2s ease-in-out infinite;
+  }
+
+  @keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.3; }
+  }
+
+  .nl-title {
+    font-size: clamp(2.2rem, 5vw, 3.2rem);
+    color: var(--text);
+    margin-bottom: 20px;
+    line-height: 1.15;
+  }
+
+  .nl-title em {
+    font-style: italic;
+    color: var(--accent-violet);
+  }
+
+  .nl-desc {
+    font-size: 1.05rem;
+    color: var(--text-muted);
+    line-height: 1.75;
+    margin-bottom: 40px;
+    max-width: 520px;
+  }
+
+  /* ── Form ─────────────────────────────────────── */
+  .nl-form {
+    margin-bottom: 48px;
+  }
+
+  .nl-input-wrap {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 10px;
+  }
+
+  .nl-input {
+    flex: 1;
+    font-family: var(--font-body);
+    font-size: 1rem;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    padding: 13px 18px;
+    color: var(--text);
+    outline: none;
+    transition: border-color 0.2s, box-shadow 0.2s;
+  }
+  .nl-input::placeholder { color: var(--text-faint); }
+  .nl-input:focus {
+    border-color: var(--accent-violet);
+    box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent-violet) 15%, transparent);
+  }
+
+  .nl-btn {
+    font-family: var(--font-body);
+    font-size: 0.95rem;
+    font-weight: 600;
+    background: var(--accent-violet);
+    color: #fff;
+    border: none;
+    border-radius: var(--radius-md);
+    padding: 13px 24px;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    transition: opacity 0.15s, transform 0.15s;
+    white-space: nowrap;
+  }
+  .nl-btn:hover { opacity: 0.88; transform: translateY(-1px); }
+
+  .btn-arrow {
+    transition: transform 0.2s;
+  }
+  .nl-btn:hover .btn-arrow { transform: translateX(3px); }
+
+  .nl-disclaimer {
+    font-size: 0.78rem;
+    color: var(--text-faint);
+  }
+
+  /* ── Stats ────────────────────────────────────── */
+  .nl-stats {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    padding: 24px 0;
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+  }
+
+  .nl-stat {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+  }
+
+  .stat-num {
+    font-family: var(--font-mono);
+    font-size: 1.4rem;
+    font-weight: 500;
+    color: var(--text);
+    letter-spacing: -0.04em;
+  }
+
+  .stat-label {
+    font-size: 0.72rem;
+    color: var(--text-faint);
+    text-transform: uppercase;
+    letter-spacing: 0.07em;
+  }
+
+  .nl-stat-div {
+    width: 1px;
+    height: 32px;
+    background: var(--border);
+  }
+
+  /* ── Archives ─────────────────────────────────── */
+  .nl-archives {
+    margin-top: 60px;
+  }
+
+  .archives-title {
+    margin-bottom: 20px;
+  }
+
+  .arch-label {
+    font-family: var(--font-body);
+    font-size: 0.82rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--text-muted);
+  }
+
+  .issues-list {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  .issue-item { list-style: none; }
+
+  .issue-link {
+    display: grid;
+    grid-template-columns: 48px 1fr auto 20px;
+    align-items: center;
+    gap: 16px;
+    padding: 16px 18px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    transition: border-color 0.2s, transform 0.2s;
+  }
+  .issue-link:hover {
+    border-color: var(--accent-violet);
+    transform: translateX(4px);
+  }
+
+  .issue-num {
+    font-family: var(--font-mono);
+    font-size: 0.78rem;
+    color: var(--accent-violet);
+    font-weight: 500;
+  }
+
+  .issue-title {
+    font-size: 0.9rem;
+    color: var(--text);
+    font-weight: 500;
+  }
+
+  .issue-date {
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    color: var(--text-faint);
+  }
+
+  .issue-arrow {
+    color: var(--accent-violet);
+    opacity: 0;
+    transition: opacity 0.15s;
+  }
+  .issue-link:hover .issue-arrow { opacity: 1; }
+
+  /* ── Responsive ───────────────────────────────── */
+  @media (max-width: 600px) {
+    .nl-input-wrap { flex-direction: column; }
+    .issue-link { grid-template-columns: 40px 1fr; }
+    .issue-date, .issue-arrow { display: none; }
+  }
+</style>
